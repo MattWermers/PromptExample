@@ -1,0 +1,33 @@
+{
+  "JobId": "[Guid]",
+  "Timestamp_Start_UTC": "[ISO 8601 DateTime]",
+  "Timestamp_End_UTC": "[ISO 8601 DateTime]",
+  "Final_Status": "[Success | Failed]",
+  "Ingestion_Metadata": {
+    "FileName": "[String]",
+    "FileSize_Bytes": "[Long]",
+    "Target_EF_Config": "[String - ExtractionConfigId]",
+    "Source_Headers": [
+      "[String]"
+    ],
+    "Total_Rows_Detected": "[Integer]"
+  },
+  "Extraction_Metrics": {
+    "Rows_Successfully_Mapped": "[Integer]",
+    "Rows_With_Anomalies": "[Integer]",
+    "Anomaly_Density_Percentage": "[Float]"
+  },
+  "Transformation_Trace": {
+    "TF_Configs_Executed": [
+      "[String]"
+    ],
+    "Grouping_Rule_Applied": [
+      "[String]"
+    ],
+    "Validation_Pipeline_Failures": "[Integer]"
+  },
+  "System_Terminations": {
+    "Terminal_Error_Encountered": "[Boolean]",
+    "Error_Trace_Reference": "[None | Path to %temp%/DWPlus_Logs/Fails/{JobId}_Error.json]"
+  }
+}

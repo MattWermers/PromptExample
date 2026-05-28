@@ -1,0 +1,48 @@
+{
+    "Details" : {
+        "TF_ID" : "NewPatientLedger", "Update" : "5/14/2026 3:00:00 PM", "Version" : "0.1",
+        "Note" : "Process new patient ledgers, reconcile transactions, and create contact."
+    },
+    "Grouping" : {
+        "GroupingRule" : [ "PatientName" , "ApptDate" ],
+        "AddMeasure" : {
+            "Nullable" : false,
+            "Columns" : [ "Credits","Charges","Adjustments" ]
+        },
+        "AddDimensions" : [ "Provider", "Description" ]
+    },
+    "ValidationFlag" : true,
+    "ValidationPipeline" : [
+        {
+            "Action" : "FilterByDescription",
+            "InputParams" : [ "Description", "New Patient" ],
+            "OutputParams" : [],
+            "On" : []
+        },
+        {
+            "Action" : "LookupCompanyAndContactType",
+            "InputParams" : [],
+            "OutputParams" : [ "CompanyId", "ContactTypeId" ],
+            "On" : [ "CompanyItem", "ContactType" ]
+        },
+        {
+            "Action" : "GetOrCreateInternalPatientID",
+            "InputParams" : [ "FirstName", "LastName", "CompanyId" ],
+            "OutputParams" : [ "InternalPatientId" ],
+            "On" : [ "Contact" ]
+        },
+        {
+            "Action" : "CreateContactRecord",
+            "InputParams" : [ "FirstName", "LastName", "ContactTypeId", "CompanyId", "InternalPatientId" ],
+            "OutputParams" : [ "ContactId" ],
+            "On" : [ "Contact" ]
+        },
+        {
+            "Action" : "RectifyCCA",
+            "InputParams" : [ "Charges", "Credits", "Adjustments" ],
+            "OutputParams" : [ "ReconciledBalance" ],
+            "On" : []
+        }
+    ],
+    "TransactionScript" : "T_NewPatientLedger.cs"
+}
